@@ -1,0 +1,47 @@
+{% extends 'server/technical/index.html' %}
+{% load static %}
+
+
+{% block title %}{{ data.title }}{% endblock %}
+{% block content %}
+
+<div class="page-wrapper">
+	<div class="page-content">
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-4 product-grid">
+			{% for tasks in list_task %}
+			<div class="col">
+				<div class="card">
+					<div class="card-body">
+						<h6 class="card-title cursor-pointer"><a href="{% url 'detail_task_adopted_customer' tasks.0 %}">{{ tasks.1 }}</a></h6>
+						<div class="clearfix">
+							<p class="mb-0 float-start"><strong>Часы:</strong> {{ tasks.2}}</p>
+							<p class="mb-1 float-end"><strong>Стоимость:</strong> {{ tasks.3 }} р</p>
+						</div>
+						<div class=" align-items-center mt-3 fs-10">
+
+						  <p class="mb-0 ms-auto"><strong>Специалист:</strong> {{ tasks.4 }}</p>
+						  <p class="mb-0 ms-auto"><strong>Дата подачи:</strong> {{ tasks.0.ata_start }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div><!--end row-->
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'server/assets/js/jquery.min.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/simplebar/js/simplebar.min.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/metismenu/js/metisMenu.min.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js' %}"></script>
+    <script src="{% static 'server/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/highcharts/js/highcharts.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/apexcharts-bundle/js/apexcharts.min.js' %}"></script>
+	<script src="{% static 'server/assets/js/dashboard-human-resources.js' %}"></script>
+
+{% endblock %}
+<!--end page wrapper -->

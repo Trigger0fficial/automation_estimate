@@ -1,0 +1,127 @@
+{% extends 'server/technical/index.html' %}
+{% load static %}
+
+
+{% block title %}{{ data.title }}{% endblock %}
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Applications</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Invoice</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="ms-auto">
+
+            </div>
+        </div>
+        <!--end breadcrumb-->
+        <div class="card">
+            <div class="card-body">
+                <div id="invoice">
+                    <div class="invoice overflow-auto">
+                        <div style="min-width: 600px">
+                            <header>
+                                <div class="row">
+                                    <div class="col">
+                                        <a href="javascript:;">
+                                            <img src="assets/images/logo-icon.png" width="80" alt="" />
+                                        </a>
+                                    </div>
+                                    <div class="col company-details">
+                                        <h2 class="name">
+                                            <a target="_blank" href="javascript:;">
+                                            {{ text_info }}
+                                            </a>
+                                        </h2>
+                                        <div class="date">Дата начала: {{ project.data_start }}</div>
+                                        <div class="date">Дата окончания: {{ project.data_end }}</div>
+                                    </div>
+                                </div>
+                            </header>
+                            <main>
+                                <div class="row contacts">
+                                    <div class="col invoice-to">
+                                        <div class="text-gray-light">Исполнитель:</div>
+                                        <h2 class="invoice-id">ИП ХОРОШКО МАКСИМ БОЛЕСЛАВОВИЧ:</h2>
+                                        <div class="address">ИНН: 645843439</div>
+                                        <div class="email"><a href="mailto:john@example.com">john@example.com</a>
+                                        </div>
+                                    </div>
+                                    <div class="col invoice-details">
+                                        <div class="text-gray-light">Заказчик:</div>
+                                        <h1 class="invoice-id">ГЕЛИОН{{ customer.0.name }}</h1>
+                                        <div class="date">Дата начала: {{ project.data_start }}</div>
+                                        <div class="date">Дата окончания: {{ project.data_end }}</div>
+                                    </div>
+                                </div>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th class="text-left">СПИСОК ЗАДАЧ</th>
+                                            <th class="text-right">СООТНОШЕНИЕ</th>
+                                            <th class="text-right">ЧАСЫ</th>
+                                            <th class="text-right">СТОИМОСТЬ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for task_id, task_data in list_task.items %}
+                                        <tr>
+                                            <td class="no">{{ task_data.0 }}</td>
+                                            <td class="text-left"><h3>{{ task_data.2 }}</h3></td>
+                                            <td class="unit">{{ task_data.1 }}%</td>
+                                            <td class="qty">{{ task_data.3 }}</td>
+                                            <td class="total">{{ task_data.4 }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="2"></td>
+                                            <td colspan="2">СТОИМОСТЬ</td>
+                                            <td>{{ total_price_project }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"></td>
+                                            <td colspan="2">ДОП. ЗАТРАТЫ ({{additional_costs_percent}}%)</td>
+                                            <td>{{ additional_costs }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"></td>
+                                            <td colspan="2">ИТОГОВАЯ СТОИМОСТЬ</td>
+                                            <td>{{ total_price }}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <div class="notices">
+                                    <div>Замечание:</div>
+                                    <div class="notice">Представленная смета является публичной предложении офертой! Не является окончательным предложением. Ссылаться на представленные данные необходимо в документе "Смета".</div>
+                                </div>
+                            </main>
+                            <footer>Invoice was created on a computer and is valid without the signature and seal.</footer>
+                        </div>
+                        <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'server/assets/js/jquery.min.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/simplebar/js/simplebar.min.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/metismenu/js/metisMenu.min.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js' %}"></script>
+{% endblock %}

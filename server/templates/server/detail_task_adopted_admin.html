@@ -1,0 +1,161 @@
+{% extends 'server/technical/index.html' %}
+{% load static %}
+
+
+{% block title %}{{ data.title }}{% endblock %}
+{% block content %}
+
+<div class="page-wrapper">
+	<div class="page-content">
+		<!--breadcrumb-->
+		<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+			<div class="breadcrumb-title pe-3">Утверждение задач</div>
+			<div class="ps-3">
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb mb-0 p-0">
+						<li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+						</li>
+						<li class="breadcrumb-item active" aria-current="page">{{ project.name }}</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+		<!--end breadcrumb-->
+
+		 <div class="card">
+			<div class="row g-0">
+			  <div class="col-md-4 border-end">
+				<img src="assets/images/products/13.png" class="img-fluid" alt="...">
+			  </div>
+			  <div class="col-md-8">
+				<div class="card-body">
+				  <h4 class="card-title">{{ name_task }}</h4>
+				  <div class="d-flex gap-3 py-3">
+					  <div>Часы: {{ scheduled_hours }}</div>
+					  <div>Дни: {{ scheduled_day }}</div>
+				  </div>
+				  <div class="mb-3">
+					<span class="price h4 text-success">Важность задачи: {{ import_task }} %</span>
+				</div>
+				  <p class="card-text fs-6">{{ dsc_task }}</p>
+				  <dl class="row">
+					<dt class="col-sm-3">Специалист:</dt>
+					<dd class="col-sm-9">{{ staff }}</dd>
+
+					<dt class="col-sm-3">Стоимость: </dt>
+					<dd class="col-sm-9">{{ sum_task }} р</dd>
+
+					<dt class="col-sm-3">Дата подачи: </dt>
+					<dd class="col-sm-9">{{ data_start }}</dd>
+				  </dl>
+				  {% if status_feedback == 'verification' or status_feedback == 'adopted' %}
+					<hr>
+					<form method="post">
+						{% csrf_token %}
+						<div class="row row-cols-auto row-cols-md-1 align-items-center">
+							<div class="row mb-3">
+								<label for="id_comment_director" class="col-sm-3 col-form-label">Комментарий</label>
+								<div class="col-sm-9">
+									{{ form.comment }}
+								</div>
+							</div>
+						</div>
+						<div class="d-flex gap-3 mt-3">
+							{% if status_feedback == 'verification' %}
+								<button type="submit" name="action" value="approve" class="btn btn-primary">Утвердить</button>
+							{% endif %}
+							<button type="submit" name="action" value="reject" class="btn btn-outline-primary">Отклонить</button>
+							<button type="submit" name="action" value="send_customer" class="btn btn-outline-primary">Отправить заказчику</button>
+						</div>
+						{% for error in form.non_field_errors %}
+							<div class="alert alert-danger mt-3">{{ error }}</div>
+						{% endfor %}
+					</form>
+				{% endif %}
+				</div>
+			  </div>
+			</div>
+			<hr/>
+			<div class="card-body">
+				<ul class="nav nav-tabs nav-primary mb-0" role="tablist">
+					<li class="nav-item" role="presentation">
+						<a class="nav-link active" data-bs-toggle="tab" href="#primaryhome" role="tab" aria-selected="true">
+							<div class="d-flex align-items-center">
+								<div class="tab-icon"><i class='bx bx-comment-detail font-18 me-1'></i>
+								</div>
+								<div class="tab-title"> Отчёт о задаче </div>
+							</div>
+						</a>
+					</li>
+					<li class="nav-item" role="presentation">
+						<a class="nav-link" data-bs-toggle="tab" href="#primaryprofile" role="tab" aria-selected="false">
+							<div class="d-flex align-items-center">
+								<div class="tab-icon"><i class='bx bx-bookmark-alt font-18 me-1'></i>
+								</div>
+								<div class="tab-title">Прошлые отчеты</div>
+							</div>
+						</a>
+					</li>
+					{% if status_feedback != 'verification' %}
+					<li class="nav-item" role="presentation">
+						<a class="nav-link" data-bs-toggle="tab" href="#newTag" role="tab" aria-selected="false">
+							<div class="d-flex align-items-center">
+								<div class="tab-icon"><i class='bx bx-bookmark-alt font-18 me-1'></i>
+								</div>
+								<div class="tab-title">Мой правки</div>
+							</div>
+						</a>
+					</li>
+					{% endif %}
+				</ul>
+				<div class="tab-content pt-3">
+					<div class="tab-pane fade show active" id="primaryhome" role="tabpanel">
+						<p>{{ report }}</p>
+					</div>
+					<div class="tab-pane fade" id="primaryprofile" role="tabpanel">
+						<div class="row row-cols-1 row-cols-lg-3">
+							{% for el in past_feedback %}
+							   <div class="col">
+								<div class="card">
+									<div class="row g-0">
+									  <div class="col-md-4">
+<!--										<img src="assets/images/products/16.png" class="img-fluid" alt="...">-->
+									  </div>
+									  <div class="col-md-8">
+										<div class="card-body">
+										  <h6 class="card-title">Дата: <a href="{% url 'detail_task_adopted_customer' el.id %}">{{ el.data_end }}</a></h6>
+										  <div class="clearfix">
+											<p class="mb-0 float-start fw-bold"><span class="me-2">Статус:</span><span>{{ el.get_is_adopted_display }}</span></p>
+										 </div>
+										</div>
+									  </div>
+									</div>
+								  </div>
+							   </div>
+							{% endfor %}
+			   			</div>
+					</div>
+					{% if status_feedback != 'verification' %}
+					<div class="tab-pane fade show active" id="newTag" role="tabpanel">
+						<p>{{ comment_director }}</p>
+					</div>
+					{% endif %}
+				</div>
+			</div>
+		  </div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'server/assets/js/jquery.min.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/simplebar/js/simplebar.min.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/metismenu/js/metisMenu.min.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js' %}"></script>
+    <script src="{% static 'server/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/highcharts/js/highcharts.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/apexcharts-bundle/js/apexcharts.min.js' %}"></script>
+	<script src="{% static 'server/assets/js/dashboard-human-resources.js' %}"></script>
+{% endblock %}

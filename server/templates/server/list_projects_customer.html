@@ -1,0 +1,88 @@
+{% extends 'server/technical/index.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}{{ data.title }}{% endblock %}
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mt-3">
+                        {% for project in projects %}
+                            {% if project.status == 'start' or project.status == 'Signing_contract' or project.status == 'Waiting' %}
+                            <div class="col-12 col-lg-4">
+                                <div class="card shadow-none border radius-15">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="fm-icon-box radius-15 bg-warning text-dark"><i class='bx bxs-door-open'></i>
+                                            </div>
+                                                <div class="ms-auto font-10"><div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-9"><i class='bx bxs-circle align-middle me-1'></i>{{ project.get_status_display }}</div>
+                                            </div>
+                                        </div>
+                                        <h5 class="mt-3 mb-0"><a href="{% url 'main_customer' project.id %}">{{ project.name }}</a></h5>
+                                        <p class="mb-1 mt-4"><span>{{ project.payment_client }} ₽</span>  <span class="float-end">{{ project.total_cost }} ₽</span>
+                                        </p>
+                                        <div class="progress" style="height: 7px;">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: {{ project.payment_client|percentage:project.total_cost|floatformat:2 }}%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% elif project.status == 'Development' %}
+                                <div class="col-12 col-lg-4">
+                                    <div class="card shadow-none border radius-15">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="fm-icon-box radius-15 bg-primary text-white"><i class='lni lni-google-drive'></i>
+                                                </div>
+                                                    <div class="ms-auto font-10"><div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-9"><i class='bx bxs-circle align-middle me-1'></i>{{ project.get_status_display }}</div>
+                                                </div>
+                                            </div>
+                                            <h5 class="mt-3 mb-0"><a href="{% url 'main_customer' project.id %}">{{ project.name }}</a></h5>
+                                            <p class="mb-1 mt-4"><span>{{ project.payment_client }} ₽</span>  <span class="float-end">{{ project.total_cost }} ₽</span>
+                                            </p>
+                                            <div class="progress" style="height: 7px;">
+                                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ project.payment_client|percentage:project.total_cost|floatformat:2 }}%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="col-12 col-lg-4">
+                                    <div class="card shadow-none border radius-15">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="fm-icon-box radius-15 bg-danger text-white"><i class='lni lni-dropbox-original'></i>
+                                                </div>
+                                                    <div class="ms-auto font-10"><div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-9"><i class='bx bxs-circle align-middle me-1'></i>{{ project.get_status_display }}</div>
+                                                </div>
+                                            </div>
+                                            <h5 class="mt-3 mb-0"><a href="{% url 'main_customer' project.id %}">{{ project.name }}</a></h5>
+                                                <p class="mb-1 mt-4"><span>{{ project.total_cost }} ₽</span>  <span class="float-end">{{ project.total_cost }} ₽</span>
+                                            </p>
+                                            <div class="progress" style="height: 7px;">
+                                                <div class="progress-bar bg-danger" role="progressbar" style="width: {{ project.payment_client|percentage:project.total_cost|floatformat:2 }}%;" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'server/assets/js/jquery.min.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/simplebar/js/simplebar.min.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/metismenu/js/metisMenu.min.js' %}"></script>
+	<script src="{% static 'server/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js' %}"></script>
+{% endblock %}
